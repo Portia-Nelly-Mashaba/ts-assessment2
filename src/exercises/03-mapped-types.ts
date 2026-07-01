@@ -16,7 +16,7 @@ export interface Settings {
  * Readonly — write the mapped type yourself. */
 
 // TODO: { readonly [K in keyof T]: T[K] }
-export type ReadOnly<T> = ___;
+export type ReadOnly<T> = { readonly [K in keyof T]: T[K] };
 
 export const locked: ReadOnly<Settings> = { theme: "dark", fontSize: 14, notifications: true };
 // @ts-expect-error every field is readonly
@@ -26,7 +26,7 @@ locked.theme = "light";
  * Make every property of T also allow null. */
 
 // TODO: { [K in keyof T]: T[K] | null }
-export type Nullable<T> = ___;
+export type Nullable<T> = { [K in keyof T]: T[K] | null };
 
 export const partial: Nullable<Settings> = { theme: null, fontSize: 14, notifications: null };
 
@@ -39,7 +39,9 @@ export const partial: Nullable<Settings> = { theme: null, fontSize: 14, notifica
  *   { [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K] } */
 
 // TODO: mapped type with `as` key remapping
-export type Getters<T> = ___;
+export type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+};
 
 // Must satisfy the Getters shape once your type is correct:
 export const settingsGetters: Getters<Settings> = {
